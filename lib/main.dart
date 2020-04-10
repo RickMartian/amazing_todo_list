@@ -31,29 +31,29 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _renderTodo(BuildContext context, int index) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: Text(data[index]["title"]),
-        ),
-        Checkbox(
-            value: data[index]["isChecked"],
-            onChanged: (newValue) => _changeCheckBox(newValue, index))
-      ],
+    return CheckboxListTile(
+      title: Text(data[index]["title"]),
+      value: data[index]["isChecked"],
+      onChanged: (newValue) => _changeCheckBox(newValue, index),
     );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Amazing Todo List"),
-      ),
-      body: ListView.builder(
-        itemBuilder: _renderTodo,
-        itemCount: data.length,
+      body: CustomScrollView(
+        slivers: <Widget>[
+          SliverAppBar(
+            title: Text('Amazing Todo List'),
+            expandedHeight: 200.0,
+            floating: true,
+            flexibleSpace: Placeholder(),
+          ),
+          ListView.builder(
+            itemBuilder: _renderTodo,
+            itemCount: data.length,
+          ),
+        ],
       ),
     );
   }
