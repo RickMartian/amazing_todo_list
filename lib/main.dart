@@ -97,7 +97,7 @@ class _HomePageState extends State<HomePage> {
             floating: true,
             flexibleSpace: FlexibleSpaceBar(
               background: Container(
-                padding: EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 20.0),
+                margin: EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 20.0),
                 alignment: Alignment.bottomCenter,
                 child: TextField(
                   onSubmitted: _onNewTodoSubmitted,
