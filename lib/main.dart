@@ -1,4 +1,7 @@
+import 'package:amazing_todo_list/interfaces/persist_data_interface.dart';
+import 'package:amazing_todo_list/services/persist_data_service.dart';
 import 'package:flutter/material.dart';
+import 'dart:convert' as convert;
 
 void main() => runApp(MyApp());
 
@@ -18,23 +21,34 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final data = [
-    {"id": 01, "title": "Tomar café", "isChecked": false},
-    {"id": 02, "title": "Ir ao médico", "isChecked": false},
-    {"id": 03, "title": "Estudar para a prova", "isChecked": false},
-  ];
+  final IPersistData localStorage = PersistDataService();
+  final data = [];
   TextEditingController _todoInputController = TextEditingController();
+
+  void initState() {
+    super.initState();
+    localStorage.get("todos").then((todos) {
+      if (todos != null) {
+        final todosParsed = convert.jsonDecode(todos);
+        setState(() {
+          data.addAll(todosParsed);
+        });
+      }
+    });
+  }
 
   void _changeCheckBox(bool newValue, int index) {
     setState(() {
       data[index]["isChecked"] = newValue;
     });
+    localStorage.put("todos", convert.jsonEncode(data));
   }
 
   void _onDismissed(DismissDirection direction, int index) {
     setState(() {
       data.removeAt(index);
     });
+    localStorage.put("todos", convert.jsonEncode(data));
   }
 
   Widget _dismissBackground(
@@ -82,6 +96,7 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       data.add(newTodo);
     });
+    localStorage.put("todos", convert.jsonEncode(data));
     _todoInputController.clear();
   }
 
